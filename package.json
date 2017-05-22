@@ -17,6 +17,7 @@
     "angular-toastr": "^2.1.1",
     "angular-ui-router": "^1.0.3",
     "animate.css": "^3.5.2",
+    "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
     "browser-sync": "^2.18.11",
     "connect-browser-sync": "^2.1.0",

@@ -3,30 +3,76 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const connect_browser_sync = require('connect-browser-sync');
-const browser_sync = require('browser-sync');    
+const browser_sync = require('browser-sync');
 const socket_io = require('socket.io');
+const body_parser = require('body-parser');
 
-function make_app(port = 8000) {
-    const app = express();
-    const http_server = http.Server(app);
-    const io = socket_io(http_server);
+module.exports = {
+    init_app, init_aux, init_announcement, init_watches, init_fallback,
+    static_files, send_index, watch_changes,
+    log_request, post_announcement
+};
 
-    use_announcement(io);
-    
-    app.use(log_request());
+if (!module.parent) {
+    const app = init_app();
+    const { http_server, io } = init_aux(app);
+
+    const port = 8000;
+    http_server.listen(port, () => {
+        console.log('app express listen on ' + port);
+    });
+}
+
+// functions
+
+function init_app(app = null) {
+    if (!app) {
+        app = express();
+    }
+
+    app.use(body_parser.urlencoded({ extended: false }));
+    app.use(body_parser.json());
+
+    app.use(log_request(0));
     app.use('/node_modules/', static_files('../node_modules/'));
     app.use('/client/', static_files('../client/'));
     app.use('/server/', static_files('../server/'));
-    app.get('/', send_index);
-    app.use(browser_watch_changes(['../client/*', '../server/*']));
-    app.use(send_index); // fall back
+    app.get('/', send_index);    
 
-
-    return {app, http_server, io};
+    return app;
 }
 
-function log_request() {
-    let index = 0;
+function init_watches(app) {
+    app.use(watch_changes(['../client/*', '../server/*']));
+}
+
+function init_fallback(app) {
+    app.use(send_index); // fall back
+}
+
+function init_aux(app) {
+    const http_server = http.Server(app);
+    const io = socket_io(http_server);
+
+    app.post('/announcement', post_announcement(io));
+
+    init_announcement(io);
+    init_watches(app);
+    init_fallback(app);
+
+    return { http_server, io };
+}
+
+function post_announcement(io) {
+    return (req, res) => {
+        console.log(req.body);
+        const data = req.body;
+        io.emit('announcement_channel', data);
+        res.status(200).json(data);
+    };
+}
+
+function log_request(index = 0) {
     return (req, res, next) => {
         const req_index = index++ + ".";
         console.log(req_index, req.method, req.url);
@@ -48,7 +94,7 @@ function send_index(req, res) {
     return res.status(200).sendFile(file);
 }
 
-function browser_watch_changes(files) {
+function watch_changes(files) {
     const browser_sync_obj = browser_sync.create().init({
         files: files,
         logSnippet: false
@@ -57,28 +103,16 @@ function browser_watch_changes(files) {
     return browser_sync_middleware;
 }
 
-function use_announcement(io) {
+function init_announcement(io) {
 
     io.on('connection', function(socket) {
-        
-        console.log('a client is connected');
-
+        // console.log('a client is connected');
         socket.on('announcement_channel', function(data) {
             io.emit('announcement_channel', data);
         });
 
         socket.on('disconnect', function(){
-            console.log('a client is disconnected');
+            // console.log('a client is disconnected');
         });
-    });
-}
-
-module.exports = make_app;
-
-if (!module.parent) {
-    const port = 8000;
-    const { app, http_server, io } = make_app(port);
-    http_server.listen(port, () => {
-        console.log('app express listen on ' + port);
     });
 }

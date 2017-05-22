@@ -1,5 +1,6 @@
 
 (function diagnostic_signature_ng_app() {
+    
     "use strict";
     
     const app = angular.module("loggrep", ["ngRoute", "toastr"]);
@@ -9,10 +10,13 @@
     app.filter("remove_id", remove_id);
     // app.factory('$templateCache', ["$cacheFactory", "$http", "$injector", cache_template]);
     app.config(["toastrConfig", toastr_config]);
-    app.config(["test_components", "dsig", "$logProvider", "$routeProvider", "$locationProvider", route_config]);
-    // app.config(["test_components", "dsig", "$logProvider", "$urlRouterProvider", "$stateProvider", "$locationProvider", state_config]);
+    app.config(["test_components", "dsig", "$logProvider", "$routeProvider", "$locationProvider",
+                route_config]);
+    // app.config(["test_components", "dsig", "$logProvider", "$urlRouterProvider", "$stateProvider",
+    //             "$locationProvider", state_config]);
     app.run(['$location','toastr', 'user', run_app]);
-    
+
+    // components
     app.component("dsLogin", {
         controllerAs : "model",
         templateUrl : "/client/login.html",
@@ -161,6 +165,7 @@
                     model.user.io.socket.emit(user.io.announcement_channel, {
                         message : model.user.io.announcement
                     });
+                    model.user.io.announcement = "";
                 }
             }
             
@@ -540,6 +545,7 @@
         }
     });
 
+    // functions
     function run_app($location, toastr, user) {
         $(document).ready(function () {
             setup_sidebar();
@@ -571,14 +577,6 @@
             $stateProvider.state(route.state, {
                 url : route.path,
                 template: route.template,
-                /* redirectTo : function (params, path, search) {
-                   console.log({params, path, search});
-                   if (search) {
-                   return path + '?' + querystring.encode(search);
-                   } else {
-                   return path;
-                   }
-                   }, */
                 caseInsensitiveMatch: true                
             });
         }
@@ -587,7 +585,7 @@
     function toastr_config(toastrConfig) {
         angular.extend(toastrConfig, {
             closeHtml: '<button>&times;</button>',
-            // timeOut: 5000,
+            timeOut: 5*60*1000,// 5 minutes in m-sec
             newestOnTop: true,
             positionClass: 'toast-bottom-center',
             preventDuplicates: false,
@@ -613,14 +611,6 @@
         function add_route(route) {
             $routeProvider.when(route.path, {
                 template: route.template,
-                /* redirectTo : function (params, path, search) {
-                   console.log({params, path, search});
-                   if (search) {
-                   return path + '?' + querystring.encode(search);
-                   } else {
-                   return path;
-                   }
-                   }, */
                 caseInsensitiveMatch: true                
             });
         }
