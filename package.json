@@ -1,0 +1,39 @@
+{
+  "name": "dsa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Timothy Shiu <timoweave@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-component": "^0.1.3",
+    "angular-route": "^1.6.4",
+    "angular-toastr": "^2.1.1",
+    "angular-ui-router": "^1.0.3",
+    "animate.css": "^3.5.2",
+    "bootstrap": "^3.3.7",
+    "browser-sync": "^2.18.11",
+    "connect-browser-sync": "^2.1.0",
+    "express": "^4.15.2",
+    "font-awesome": "^4.7.0",
+    "jasny-bootstrap": "^3.1.3",
+    "jquery": "^3.2.1",
+    "live-server": "^1.2.0",
+    "livereload": "^0.6.2",
+    "pify": "^2.3.0",
+    "reload": "^1.1.5",
+    "reloadify": "^0.2.2",
+    "socket.io": "^2.0.1",
+    "socket.io-client": "^2.0.1",
+    "ui-router-visualizer": "^4.0.0"
+  },
+  "devDependencies": {
+    "connect-livereload": "^0.6.0"
+  }
+}

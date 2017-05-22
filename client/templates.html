@@ -1,0 +1,852 @@
+<script type="text/ng-template" id="/client/login.html">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-offset-2 col-xs-8 col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4 card-shadow"
+           style="margin-top:5em;padding:3em;background:white;" >
+        
+        <div class="row-fluid" style="text-align:center;margin-bottom:2.6em;">
+          <h3>Login</h3>
+        </div>
+        
+        <div class="row-fluid">
+          <div class="input-group">
+            <div class="input-group-addon" style="border-radius:0px">
+              <span class="glyphicon glyphicon-user"></span></div>
+            <input type="email" class="form-control" id="menu_bar_txt_email"
+                   style="border-radius:0px;" placeholder="Email">
+          </div>
+        </div>
+
+        <div class="row-fluid">
+          <div class="input-group">
+            <div class="input-group-addon" style="border-radius:0px">
+              <span class="glyphicon glyphicon-lock"></span></div>
+            <input type="password" class="form-control" id="menu_bar_txt_password"
+                   style="border-radius:0px;" placeholder="Password">
+          </div>
+        </div>
+
+        <div class="row-fluid" style="margin-top:1em;margin-bottom:1em;">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="model.user.login.remember"> Remember me
+            </label>
+          </div>
+        </div>
+
+        <div class="row-fluid">
+          <button type="button" style="border-radius:0px" class="btn btn-primary btn-block">Sign in</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+
+<script type="text/ng-template" id="/client/header.html">
+  
+  <div class="container-fullwidth">
+    <div class="navbar navbar-inverse"
+         style="border-radius:0px;background-color:white!important;color:teal;border:none;font-size:1.0em;margin-bottom:0px;">
+      <div class="container-fluid">
+        
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed"
+                  data-toggle="collapse" data-target="#menu_bar_nav_bar"
+                  aria-expanded="false">
+            <span class="glyphicon glyphicon-option-vertical" style="color:teal;">
+            </span>
+          </button>
+
+          <a class="navbar-brand" style="font-size:1.2em;margin-left:0.2em;color:teal;"
+             href="/welcome">
+            {{model.dsig.title.name}}
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="menu_bar_nav_bar">
+          <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                 style="width:12.5em;color:teal;" aria-haspopu="true" aria-expaned="false">
+                {{model.template}}
+                <span class="caret"></span>              
+              </a>
+              <ul class="dropdown-menu" style="width:12.5em;">
+                <li ng-repeat="menu in model.dsig.header">
+                  <a role="button" class="select_template" data-template-name={{menu.name}} style="color:teal;"
+                     ng-href="{{menu.path | remove_id }}{{'/' + model.user.cdets.id  + (model.user.login.sidebar ? '?sidebar=1' : '')}}">
+                    {{menu.name}}
+                  </a>
+                </li>
+                <li>
+                  <a role="button" style="color:teal;"
+                     ng-href="{{model.dsig.cdets.path + '&identifier=' + model.user.cdets.id}}">
+                    {{model.dsig.cdets.name}}
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a style="padding-top:8px;padding-bottom:0px;">
+                <input type="text" class="form-control" placeholder="Search Bug ID" style="color:teal;"
+                       ng-model="model.user.cdets.id" ng-change="model.change_id()">
+              </a>
+            </li>
+            <li>
+              <a ng-click="model.toggle_sidebar($event)" style="color:teal;">
+                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>              
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</script>
+
+
+<script type="text/ng-template" id="/client/footer.html">
+
+  <div class="container-fullwidth">
+    <div class="row" style="margin:0px;padding:0px;">
+      <div class="hiddend-sm col-md-12" style="margin:0px;padding:0px;">
+        <nav class="navbar navbar-inverse navbar-fixed-bottom"
+             role="navigation"  style="border-radius: 0px; border:none;background: #2C3E50; color: white;">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="#" style="text-decoration:none; pointer-events:none;">
+                © 2017 TAC, Cisco. All right reserved.
+              </a>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right" style="padding-right:2em;">
+            <li ng-repeat="menu in model.dsig.footer">
+              <a href="{{menu.path}}">
+                {{menu.name}}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/sidebar.html">
+
+  <div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a style="color:white;background-color:$607D8B;">
+          User
+        </a>
+      </li>
+      <li style="margin-left:2px;">
+        <input type="email" ng-model="model.user.username" class="form-control"
+               style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;margin-top:0px;"
+               placeholder="Enter Usename">
+      </li>
+      <li style="margin-left:2px;">
+        <input type="password" ng-model="model.user.password" class="form-control"
+               style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+               placeholder="Enter Password">      
+      </li>
+      <li>
+        <button type="button" class="btn btn-primary" style="width:85%;">
+          Login
+        </button>
+      </li>
+
+      <hr style="margin-bottom:0px;"/>
+
+      <li class="sidebar-brand">
+        <a style="color:white;background-color:$607D8B;">
+          Developer
+        </a>
+      </li>
+      
+      <li style="margin-left:2px;">
+        <input type="text" class="form-control" autocomplete
+               ng-model="model.user.misc.cdets" ng-keyup="model.cdets_change($event)"
+               style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+               placeholder="CDETS Bug-Number">      
+      </li>
+      <li style="margin-left:2px;margin-top:0px;">
+        <input type="text" class="form-control" autocomplete
+               ng-model="model.user.misc.ithaca" ng-keyup="model.ithaca_change($event)"
+               style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;margin-top:0px;"
+               placeholder="Jira ITHACA-Number">      
+      </li>
+      <li style="margin-left:2px;">
+        <input type="text" class="form-control" autocomplete
+               ng-model="model.user.misc.phabricator" ng-keyup="model.phabricator_change($event)"
+               style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+               placeholder="Phabricator D-Number">      
+      </li>
+      <li>
+        <a href="/about">About</a>
+      </li>
+      
+    </ul>
+  </div>
+
+</script>
+
+
+<script type="text/ng-template" id="/client/welcome.html">
+
+  <div>
+    <div class="jumbotron" style="padding-top:105em;margin-top:-100em;background-color:#FCAB1B;">
+
+      <div class="container-fluid text-center">
+        <h1 style="color:white; font-size: 5em; font-weight: 800;margin-bottom:0.6em;">Diagnostic Signature App</h1>
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-8">
+            <p class="text-center" style="color:white;">
+              Vel orci porta non pulvinar neque laoreet suspendisse interdum consectetur
+              libero, id faucibus nisl tincidunt eget nullam non nisi est, sit amet
+              facilisis magna etiam. Pellentesque elit eget gravida cum?
+            </p>
+          </div>
+        </div>
+        <p>
+          <a class="btn btn-primary btn-lg" href="/doc" role="button" style="border-radius:0px;">
+            Learn more
+          </a>
+        </p>
+
+      </div>
+
+
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+          <ds-pos-log></ds-pos-log>
+        </div>
+        <div class="col-sm-4">
+          <ds-neg-log></ds-neg-log>        
+        </div>
+        <div class="col-sm-4">
+          <ds-cdets></ds-cdets>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/positive_log.html">
+  
+  <div style="width:100%;padding-bottom:8em;">
+
+    <h2 style="text-align:center;">
+      <span class="fa fa-check-circle" style="color:green;font-size:4em;"></span>
+      <br/>
+      <span>Positive Check</span>
+    </h2>
+
+    <p>
+      Pretium fusce id velit ut tortor pretium
+      viverra <ds-pos-phrase>suspendisse</ds-pos-phrase> potenti? Non
+      nisi est, sit amet facilisis magna etiam tempor, orci eu lobortis
+      elementum, nibh tellus molestie nunc, non
+      blandit <ds-pos-phrase>massa </ds-pos-phrase>
+    </p>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/negative_log.html">
+  
+  <div style="width:100%;padding-bottom:8em;">
+
+    <h2 style="text-align:center;">
+      <span class="fa fa-times-circle" style="color:red;font-size:4em;"></span>
+      <br/>
+      <span>Negative Check</span>
+    </h2>
+    
+    <p>
+      Massa <ds-neg-phrase>tempor</ds-neg-phrase> nec feugiat nisl pretium fusce id velit ut tortor
+      pretium viverra suspendisse potenti nullam ac tortor vitae purus
+      faucibus ornare suspendisse sed nisi lacus, sed! Convallis <ds-neg-phrase>posuere</ds-neg-phrase>
+      morbi leo urna, molestie at elementum eu, facilisis sed odio
+      morbi?
+    </p>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/cdets.html">
+  
+  <div style="width:100%;padding-bottom:8em;">
+
+    <h2 style="text-align:center;">
+      <span class="fa fa-lock" style="color:darkcyan;font-size:4em;"></span>
+      <br/>
+      <span>Save to Cdets</span>
+    </h2>
+
+    <p>
+      In fermentum posuere urna nec tincidunt praesent semper feugiat
+      nibh sed pulvinar proin gravida hendrerit! Egestas pretium aenean
+      pharetra, magna ac placerat vestibulum, lectus mauris ultrices
+      eros, in cursus turpis massa tincidunt dui ut ornare lectus amet
+      est placerat <i class="fa fa-lock" style="color:darkcyan;"aria-hidden="true"></i>.
+    </p>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/positive_phrase.html">
+
+  <span class="badge" style="color:white;background-color:lightgrey">
+    <i ng-transclude></i>
+    <i class="glyphicon glyphicon-ok-circle" style="color:green"></i>
+  </span>
+
+</script>
+
+<script type="text/ng-template" id="/client/negative_phrase.html">
+
+  <span class="badge" style="color:white;background-color:lightgrey">
+    <i ng-transclude></i>
+    <i class="glyphicon glyphicon-remove-circle" style="color:red"></i>
+  </span>
+
+</script>
+
+<script type="text/ng-template" id="/client/search_row.html">
+  
+  <div class="container-fluid">
+
+    <div class="row" style="margin-top:1em;margin-bottom:1em;">
+      <div class="col-sm-12">
+        <div class="input-group" style="width:100%;">
+          <span class="input-group-addon" style="border-radius:0px;">
+            Search CDETS Bug          
+          </span>
+          <input type="text" ng-model="model.user.cdets.id" class="form-control"
+                 placeholder="Search Bug ID"  style="border-radius:0px;">
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/search_bug.html">
+
+  <div class="input-group" style={{model.style}}>
+    <input type="text" class="form-control" 
+           style="background-color:#ededed;"
+           placeholder="Search Bug ID"
+           ng-model="model.id"
+           id="query" name="query" style="border-radius:0px;">
+    <div class="input-group-btn">
+      <button type="submit" class="btn btn-success" 
+              style="border-radius:0px;">
+        <span class="glyphicon glyphicon-search"></span>
+      </button>
+    </div>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/retrieve_records.html">
+  
+  <div class="container-fluid" style="margin-top:0.2em;margin-bottom:0.2em;">
+
+    <div class="panel panel-default"  style="border-radius:0px;">
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">
+          Retrieve from Database
+        </span>
+        <div class="form-inline pull-right">
+          <input name="" type="text" value="" placeholder="mongo id"
+                 ng-model="model.user.cdets.id"
+                 class="form-control input-lg" style="margin-right:0.4em; height:34px;" />
+          <button class="btn btn-primary pull-right" type="button"
+                  data-toggle="collapse" data-target="#collapse_retrieve_records"
+                  aria-expanded="true" aria-controls="collapse_retrieve_records">
+            done
+          </button>
+        </div>
+      </div>
+
+      <div id="collapse_retrieve_records" class="collapse">
+        <div class="panel-body">
+          <table class="table" style="border-style: solid; border-width: 1px; border-color: lightgrey;">
+            <tr>
+              <th>Author</th>
+              <th>Modified Date</th> 
+              <th>Validation State</th>
+              <th>Distribution Level</th>
+              <th>Mongo ID</th>
+              <th></th>                 
+            </tr>
+            
+            <tr ng-repeat="record in model.user.records">
+              
+              <td>{{record.author}}</td>
+              <td>{{record.dateModified}}</td> 
+              <td>{{record.validationState}}</td>
+              <td>{{record.distributionLevel}}</td>
+              <td>{{record.mongoId}} <span class="glyphicon glyphicon-remove" style="color:red;"></span></td>
+              <td><span class="glyphicon glyphicon-ok" style="color:green;"></span></td>         
+            </tr>
+          </table>
+        </div>
+        
+        <div class="panel-footer" style="background-color:transparent;border-radius:0px;">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="bt-group pull-right">
+                  <button class="btn btn-danger">cancel</button>
+                  <button class="btn btn-primary">save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>  
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/retrieve_records_body.html">
+
+  <div>
+    <table class="table" style="border-style: solid; border-width: 1px; border-color: lightgrey;">
+      <tr>
+        <th>Author</th>
+        <th>Modified Date</th> 
+        <th>Validation State</th>
+        <th>Distribution Level</th>
+        <th>Mongo ID</th>
+        <th></th>                 
+      </tr>
+      
+      <tr ng-repeat="record in model.user.records">
+        
+        <td>{{record.author}}</td>
+        <td>{{record.dateModified}}</td> 
+        <td>{{record.validationState}}</td>
+        <td>{{record.distributionLevel}}</td>
+        <td>{{record.mongoId}} <span class="glyphicon glyphicon-remove" style="color:red;"></span></td>
+        <td><span class="glyphicon glyphicon-ok" style="color:green;"></span></td>         
+      </tr>
+    </table>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/define_logic.html">
+  
+  <div class="container-fluid" style="margin-top:0.2em;margin-bottom:0.2em;">
+    <div class="panel panel-default panel-collapse" style="border-radius:0px;">
+
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">
+          Define Logic Expressions        
+        </span>
+
+
+        <div class="form-inline pull-right">
+          <input name="" type="text" value="" placeholder="Enter logic expression"
+                 class="form-control input-lg" style="margin-right:0.4em; height:34px;" />
+          <button class="btn btn-primary pull-right" type="button"
+                  data-toggle="collapse" data-target="#collapse_define_logic"
+                  aria-expanded="true" aria-controls="collapse_define_logic">
+            done
+          </button>
+        </div>
+      </div>
+      
+      <div id="collapse_define_logic" class="collapse">
+        
+        <div class="panel-body">
+          <ds-define-logic-body></ds-define-logic-body>
+        </div>
+        
+        <div class="panel-footer" style="background-color:transparent;border-radius:0px;">
+          <ds-define-logic-footer></ds-define-logic-footer>
+        </div>
+        
+      </div>
+      
+    </div>    
+  </div>
+
+
+</script>
+
+<script type="text/ng-template" id="/client/define_logic_body.html">
+  <div>
+
+    <table class="table" style="border-style: solid; border-width: 1px; border-color: lightgrey;">
+      <tr>
+        <th>Label</th>
+        <th>Filename</th>
+        <th>Command</th> 
+        <th>Output</th>
+        <th>Regex</th>
+        <th>Comments</th>
+      </tr>
+      
+      <tr ng-repeat="exp in model.user.cdets.expressions">
+        <td><input name="" type="text" ng-model="exp.label" style="border:none" placeholder="label"/></td>
+        <td><input name="" type="text" ng-model="exp.logs" style="border:none" placeholder="filename"/></td> 
+        <td><input name="" type="text" ng-model="exp.command" style="border:none" placeholder="command statment"/></td>
+        <td><input name="" type="text" ng-model="exp.output" style="border:none" placeholder="text literals"/></td>
+        <td><input name="" type="text" ng-model="exp.regex" style="border:none" placeholder="regular express"/></td>
+        <td><input name="" type="text" ng-model="exp.comments" style="border:none"/></td>
+      </tr>
+    </table>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/define_logic_footer.html">
+
+  <div class="container-fluid">  
+    <div class="row">
+      <div class="col-sm-12">
+        <button class="btn btn-danger">skip</button>
+        <div class="bt-group pull-right">
+          <button class="btn btn-danger">cancel</button>
+          <button class="btn btn-danger">add</button>                
+          <button class="btn btn-primary">save</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/validate_files.html">
+  
+  <div class="container-fluid" style="margin-top:0.2em;margin-bottom:0.2em;">
+
+    <div class="panel panel-default"  style="border-radius:0px;">
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">      
+          Validate Against Updated Files
+        </span>
+        <div class="form-inline pull-right">
+          <input name="" type="text" value="" placeholder="positive file"
+                 class="form-control input-lg" style="margin-right:0.4em; height:34px;" />
+
+          <input name="" type="text" value="" placeholder="negative file"
+                 class="form-control input-lg" style="margin-right:0.4em; height:34px;" />
+
+          <button class="btn btn-primary" type="button"
+                  data-toggle="collapse" data-target="#collapse_validate_files"
+                  aria-expanded="true" aria-controls="collapse_validate_files">
+            done
+          </button>
+        </div>
+      </div>
+
+      <div id="collapse_validate_files" class="collapse">
+        
+        <div class="panel-body">
+
+          <ds-validate-files-body></ds-validate-files-body>
+        </div>
+        
+      </div>
+    </div>    
+  </div>
+
+
+</script>
+
+<script type="text/ng-template" id="/client/validate_files_body.html">
+
+  <div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          
+          <ds-review-panel title="Validate Positive Status" percent="60"
+                           review="Faucibus et molestie ac, feugiat sed lectus vestibulum mattis ullamcorper velit? Magna eget est lorem ipsum dolor sit amet, consectetur adipiscing elit pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.">
+          </ds-review-panel>
+        </div>
+        
+        <div class="col-sm-6">  
+          <ds-review-panel title="Validate Negative Status" percent="100"
+                           review="Lectus arcu, bibendum at varius vel, pharetra vel turpis nunc eget lorem dolor, sed viverra ipsum nunc aliquet bibendum enim, facilisis gravida neque convallis a cras semper. Enim nec dui nunc mattis enim ut tellus elementum sagittis?">
+          </ds-review-panel>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/finalize_record.html">
+  
+  <div class="container-fluid" style="margin-top:0.2em;margin-bottom:0.2em;">
+
+    <div class="panel panel-default" style="border-radius:0px;">
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">
+          Finalize Record
+        </span>
+        <button class="btn btn-primary pull-right" type="button"
+                data-toggle="collapse" data-target="#collapse_finalize_record"
+                aria-expanded="true" aria-controls="collapse_finalize_record">
+          done
+        </button>
+      </div>
+
+      <div id="collapse_finalize_record" ng-class="">
+        
+        <div class="panel-body">
+
+          <ds-finalize-record-body expand={{model.expand}}></ds-finalize-record-body>
+        </div>
+        
+      </div>
+    </div>    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/finalize_record_body.html">
+
+  <div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3">
+          <ds-review-panel title="Review Signature" percent="70"
+                           review="Leo a diam sollicitudin tempor id eu. Arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc, sed blandit libero volutpat! Curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet.">
+          </ds-review-panel>
+        </div>
+
+        <div class="col-sm-3">
+          <ds-review-panel title="Defect Summary" percent="80"
+                           review="Viverra accumsan in nisl nisi, scelerisque eu! Augue mauris augue neque, gravida in fermentum et, sollicitudin ac orci phasellus egestas tellus rutrum tellus pellentesque eu tincidunt tortor aliquam nulla?">
+          </ds-review-panel>
+          
+        </div>
+
+        <div class="col-sm-3">
+          <ds-review-panel title="Validation Results" percent="77"
+                           review="Rutrum quisque non tellus orci, ac auctor augue mauris augue neque, gravida in fermentum et, sollicitudin. Amet cursus sit amet, dictum sit amet justo donec enim diam, vulputate ut pharetra sit amet, aliquam id diam maecenas ultricies mi. Commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue!">
+          </ds-review-panel>
+        </div>
+
+        <div class="col-sm-3">
+          <ds-review-panel title="Finalize Results"  percent="100"
+                           review="Risus nullam eget felis eget nunc lobortis mattis? Lacus, viverra vitae congue eu! Odio morbi quis commodo odio aenean sed adipiscing diam donec adipiscing tristique risus nec feugiat in fermentum posuere urna nec tincidunt praesent semper feugiat. Quisque non tellus orci, ac auctor augue mauris augue neque, gravida in fermentum.">
+          </ds-review-panel>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <ds-review-panel title="Result Output Log" percent="70"
+                           review="Vitae et leo duis ut diam quam nulla porttitor massa id neque aliquam vestibulum morbi blandit cursus risus, at ultrices mi tempus imperdiet nulla malesuada pellentesque elit. Auctor neque, vitae tempus quam? Sit amet luctus venenatis, lectus magna fringilla urna, porttitor. Interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt id aliquet risus feugiat in ante metus, dictum at tempor commodo, ullamcorper a. Volutpat ac tincidunt vitae, semper quis lectus nulla at volutpat diam ut venenatis tellus in metus vulputate eu scelerisque felis imperdiet proin fermentum leo vel orci porta non pulvinar? Venenatis cras sed felis eget velit aliquet sagittis id consectetur purus ut faucibus. Hendrerit gravida rutrum quisque non tellus orci, ac auctor augue mauris augue! Ac tortor dignissim convallis aenean et tortor at risus viverra adipiscing at in tellus integer feugiat scelerisque varius morbi enim nunc, faucibus a pellentesque. Id faucibus nisl tincidunt eget nullam non nisi est, sit amet facilisis magna etiam tempor, orci. Tortor at risus viverra adipiscing at in tellus integer feugiat scelerisque varius morbi enim nunc, faucibus a! Neque, volutpat ac tincidunt vitae, semper quis lectus nulla at volutpat diam ut venenatis tellus in metus vulputate eu scelerisque felis imperdiet!"/>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/review_panel.html">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">
+        <a class="accordion-toggle" data-toggle="collapse">
+          {{model.title}}
+        </a>
+      </h2>
+    </div>
+    
+    <div class="panel-collapse">
+      <div class="panel-body">
+        <p>
+          {{model.review}}
+        </p>
+
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="{{model.percent}}"
+               aria-valuemin="0" aria-valuemax="100" style="width:{{model.percent}}%">
+            {{model.percent}}%
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel-footer" style="background-color:transparent;border-radius:0px;">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="bt-group pull-right">
+                <button class="btn btn-danger">cancel</button>
+                <button class="btn btn-primary">save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/diagnostic_signature.html">
+
+  <div class="container-fluid">
+
+    <div style="margin:0.2em;"> &nbsp; </div>
+    
+    <div class="panel panel-default panel-collapse" style="border-radius:0px;">
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">
+          Diagnostic Signature
+        </span>
+        <div class="form-inline pull-right">
+          <a class="btn btn-default" role="tab" 
+             ng-href="/diagnostic_signature/{{model.user.cdets.id + '?retrieve_records=1'}}">
+            Retrieve
+          </a>
+          <a class="btn btn-default" role="tab" 
+             ng-href="/diagnostic_signature/{{model.user.cdets.id + '?define_logic=1'}}">
+            Define
+          </a>
+          <a class="btn btn-default" role="tab" 
+             ng-href="/diagnostic_signature/{{model.user.cdets.id + '?validate_files=1'}}">
+            Validate
+          </a>
+          <a class="btn btn-default" role="tab" 
+             ng-href="/diagnostic_signature/{{model.user.cdets.id + '?finalize_record=1'}}">
+            Finalize
+          </a>
+        </div>
+      </div>
+      
+      <div class="panel-body">
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane" id="retrieve_records">
+            <ds-retrieve-records_body></ds-retrieve-records_body>
+            <ds-retrieve-records_footer></ds-retrieve-records_footer>          
+          </div>
+          <div role="tabpanel" class="tab-pane" id="define_logic">
+            <ds-define-logic-body></ds-define-logic-body>          
+          </div>
+          <div role="tabpanel" class="tab-pane" id="validate_files">
+            <ds-validate-files-body></ds-validate-files-body>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="finalize_record">
+            <ds-finalize-record-body></ds-finalize-record-body>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/field_notice.html">
+
+  <div class="container-fluid">
+
+    <div style="margin:0.2em;"> &nbsp; </div>
+    
+    <div class="panel panel-default panel-collapse" style="border-radius:0px;">
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">
+          Field Notice
+        </span>
+      </div>
+      
+      <div class="panel-body">
+        <ds-retrieve-records></ds-retrieve-records>  
+        <ds-define-logic></ds-define-logic>
+        <ds-validate-files></ds-validate-files>
+        <ds-finalize-record></ds-finalize-record>
+      </div>
+    </div>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/release_notes.html">
+
+  <div class="container-fluid">
+
+    <div style="margin:0.2em;"> &nbsp; </div>
+    
+    <div class="panel panel-default panel-collapse" style="border-radius:0px;">
+      <div class="panel-heading clearfix">
+        <span class="panel-title pull-left" style="margin-top:0.3em;">
+          Release Notes
+        </span>
+      </div>
+      
+      <div class="panel-body">
+        <ds-finalize-record expand={{model.expand}}></ds-finalize-record>
+        <ds-validate-files expand={{model.expand}}></ds-validate-files>
+        <ds-define-logic expand={{model.expand}}></ds-define-logic>      
+        <ds-retrieve-records expand={{model.expand}}></ds-retrieve-records>        
+      </div>
+    </div>
+    
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/doc.html">
+
+  <div class="container-fluid">
+    documentation
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/api.html">
+
+  <div class="container-fluid">
+    api
+  </div>
+
+</script>
+
+<script type="text/ng-template" id="/client/about.html">
+
+  <div class="container-fluid">
+    about
+  </div>
+
+</script>
+

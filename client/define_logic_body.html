@@ -1,0 +1,23 @@
+<div>
+
+  <table class="table" style="border-style: solid; border-width: 1px; border-color: lightgrey;">
+    <tr>
+      <th>Label</th>
+      <th>Filename</th>
+      <th>Command</th> 
+      <th>Output</th>
+      <th>Regex</th>
+      <th>Comments</th>
+    </tr>
+    
+    <tr ng-repeat="exp in model.user.cdets.expressions">
+      <td><input name="" type="text" ng-model="exp.label" style="border:none" placeholder="label"/></td>
+      <td><input name="" type="text" ng-model="exp.logs" style="border:none" placeholder="filename"/></td> 
+      <td><input name="" type="text" ng-model="exp.command" style="border:none" placeholder="command statment"/></td>
+      <td><input name="" type="text" ng-model="exp.output" style="border:none" placeholder="text literals"/></td>
+      <td><input name="" type="text" ng-model="exp.regex" style="border:none" placeholder="regular express"/></td>
+      <td><input name="" type="text" ng-model="exp.comments" style="border:none"/></td>
+    </tr>
+  </table>
+
+</div>

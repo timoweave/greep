@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" ng-app="loggrep">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0"/>
+    <title>Diagnostic Signature</title>
+    <link rel="shortcut icon" href="/server/favicon.png" type="image/png">
+    <base href="/" />
+
+  </head>
+  
+  <body ng-cloak style="height:100%;">
+
+    <!-- 
+    <ng-include src="'/client/templates.html'"></ng-include>
+    <ng-include src="'test.html'"></ng-include>
+    -->
+    
+    <div id="wrapper">
+      <ds-sidebar></ds-sidebar>
+      <div classs="page-content-wrapper"
+           style="background-color:rgba(192, 192, 192, 0.11);"           
+           >
+        <ds-header></ds-header>
+        <ng-view></ng-view>
+        <!-- <ui-view></ui-view> -->
+        <ds-footer></ds-footer>              
+      </div>
+    </div>
+    
+    <div id="__css__">
+      <link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+      <link href="/node_modules/jasny-bootstrap/dist/css/jasny-bootstrap.css" rel="stylesheet"/>
+      <link href="/node_modules/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+      <link href="/node_modules/angular-toastr/dist/angular-toastr.css" rel="stylesheet"/>
+    </div>
+
+    <div id="__js__">
+      <script src="/node_modules/jquery/dist/jquery.js"></script>
+      <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+      <script src="/node_modules/jasny-bootstrap/dist/js/jasny-bootstrap.js"></script>
+      <script src="/node_modules/angular/angular.js"></script>
+      <script src="/node_modules/angular-route/angular-route.js"></script>
+      <script src="/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="/node_modules/angular-component/dist/angular-component.js"></script>
+      <script src="/node_modules/angular-toastr/dist/angular-toastr.tpls.js"></script>
+      <script src="/node_modules/socket.io-client/dist/socket.io.js"></script>
+    </div>
+
+    <div id="__app__">
+      <link href="/client/index.css" rel="stylesheet"/>
+      <script src="/client/index.js"></script>
+    </div>
+
+  </body>
+</html>

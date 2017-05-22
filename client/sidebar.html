@@ -1,0 +1,62 @@
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand">
+      <a style="color:white;background-color:$607D8B;">
+        User
+      </a>
+    </li>
+    <li style="margin-left:2px;">
+      <input type="email" ng-model="model.user.username" class="form-control"
+             style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;margin-top:0px;"
+             placeholder="Enter Usename">
+    </li>
+    <li style="margin-left:2px;">
+      <input type="password" ng-model="model.user.password" class="form-control"
+             style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+             placeholder="Enter Password">      
+    </li>
+    <li>
+      <button type="button" class="btn btn-primary" style="width:85%;">
+        Login
+      </button>
+    </li>
+
+    <hr style="margin-bottom:0px;"/>
+
+    <li class="sidebar-brand">
+      <a style="color:white;background-color:$607D8B;">
+        Developer
+      </a>
+    </li>
+    
+    <li style="margin-left:2px;">
+      <input type="text" class="form-control" autocomplete
+             ng-model="model.user.misc.cdets" ng-keyup="model.cdets_change($event)"
+             style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+             placeholder="CDETS Case-Number">
+    </li>
+    <li style="margin-left:2px;margin-top:0px;">
+      <input type="text" class="form-control" autocomplete
+             ng-model="model.user.misc.ithaca" ng-keyup="model.ithaca_change($event)"
+             style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;margin-top:0px;"
+             placeholder="Jira ITHACA-Number">
+    </li>
+    <li style="margin-left:2px;">
+      <input type="text" class="form-control" autocomplete
+             ng-model="model.user.misc.phabricator" ng-keyup="model.phabricator_change($event)"
+             style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+             placeholder="Phabricator D-Number">
+    </li>
+    <li style="margin-left:2px;">
+      <textarea type="text" class="form-control" rows="3" autocomplete
+                ng-model="model.user.io.announcement" ng-keyup="model.announcement_change($event)"
+                style="border-radius:0px; padding-left:18px; border:none; width:212px; margin:18px;"
+                placeholder="App Announcement">
+        </textarea>
+    </li>
+    <li>
+      <a href="/about">About</a>
+    </li>
+      
+  </ul>
+</div>
