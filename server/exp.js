@@ -16,7 +16,7 @@ const models = require('./models.js');
 module.exports = {
     init_app, init_aux, init_socketio,
     run_app, static_files, watch_changes, restify_models,
-    send_index, send_index2,
+    send_index, 
     log_request, post_announcement
 };
 
@@ -116,12 +116,6 @@ function static_files(sub_path, opt={}) {
 function send_index(req, res) {
     const dir = process.env.PWD;
     const file = path.join(dir, '../client/index.html');
-    return res.status(200).sendFile(file);
-}
-
-function send_index2(req, res) {
-    const dir = process.env.PWD;
-    const file = path.join(dir, '../client/index2.html');
     return res.status(200).sendFile(file);
 }
 

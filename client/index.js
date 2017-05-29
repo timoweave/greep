@@ -3,19 +3,19 @@
     
     "use strict";
     
-    const app = angular.module("loggrep", ["ngRoute", "toastr", "angularSpinner"]);
+    const app = angular.module("greg", ["ui.router", "ngRoute", "toastr", "angularSpinner"]);
     app.constant("dsig", dsig_constant());
     app.constant("test_components", test_components());
     app.value("user", user_value());
     app.filter("remove_id", remove_id);
     // app.factory('$templateCache', ["$cacheFactory", "$http", "$injector", cache_template]);
-    app.config(["usSpinnerConfigProvider", spin_config]);
-    app.config(["toastrConfig", toastr_config]);
-    app.config(["test_components", "dsig", "$logProvider", "$routeProvider", "$locationProvider",
-                route_config]);
-    // app.config(["test_components", "dsig", "$logProvider", "$urlRouterProvider", "$stateProvider",
-    //             "$locationProvider", state_config]);
-    app.run(['$location','toastr', 'usSpinnerService', 'user', run_app]);
+    app.config(["usSpinnerConfigProvider", config_spin]);
+    app.config(["toastrConfig", config_toastr]);
+    // app.config(["test_components", "dsig", "$logProvider", "$routeProvider", "$locationProvider",
+    // config_route]);
+    app.config(["test_components", "dsig", "$logProvider", "$urlRouterProvider", 
+                "$locationProvider", "$stateProvider", config_state]);
+    app.run(['$rootScope', '$location','toastr', 'usSpinnerService', 'dsig', 'user', run_app]);
 
     // components
     app.component("dsLogin", {
@@ -36,14 +36,16 @@
             model.dsig = dsig;
             model.user = user;
             model.welcome = welcome;
-            model.template = "Diagnostic Signature";
             model.$location = $location;
+            model.template = "Select a Template";
             model.old_id = "";
             model.old_template = "";
             model.toggle_sidebar = toggle_sidebar;
             model.select_template = select_template;
             model.change_id = change_id;
-
+            model.dropdown_href = dropdown_href;
+            model.dropdown_sref = dropdown_sref;
+            
             // $templateCache.get("/client/header.html");
             if ($routeParams.id) {
                 model.old_id = $routeParams.id;
@@ -75,6 +77,37 @@
                 }
             });
 
+            function extract_template() {
+                let template = "Select a template";
+                model.dsig.header.map(function(header) {
+                    header.path = header.path.replace(/:id\?/, '');
+                    return header;
+                }).forEach(function(header) {
+                    const match = model.$location.$$path.match(header.path);
+                    if (match) {
+                        template = header.name;
+                    }
+                });
+                return template;
+            }
+            
+            function dropdown_cdets() {
+                return model.dsig.cdets.path + '&identifier=' + model.user.cdets.id;
+            }
+
+            function dropdown_sref(menu) {
+                return menu.state + "({id: model.user.cdets.id})";
+            }
+            
+            function dropdown_href(menu) {
+                let href = menu.path.replace(/\/:id\?/, '') + '/';
+                href += model.user.cdets.id;
+                if (model.user.login.sidebar) {
+                    href += '?sidebar=1';
+                }
+                return href;
+            }
+            
             function select_template(event) {
                 return; /////////////////////////////
                 
@@ -205,7 +238,10 @@
     app.component("dsWelcome", {
         controllerAs : "model",
         templateUrl: "/client/welcome.html",
-        constroller : function ($templateCache) {
+        controller : function (user, dsig, $templateCache) {
+            const model = this;
+            model.user = user;
+            model.dsig = dsig;
             // $templateCache.get("/client/welcome.html");
         }        
     });
@@ -213,7 +249,7 @@
     app.component("dsPosLog", {
         controllerAs : "model",
         templateUrl: "/client/positive_log.html",
-        constroller : function ($templateCache) {
+        controller : function ($templateCache) {
             // $templateCache.get("/client/positive_log.html");
         }
     });
@@ -221,7 +257,7 @@
     app.component("dsNegLog", {
         controllerAs : "model",
         templateUrl: "/client/negative_log.html",
-        constroller : function ($templateCache) {
+        controller : function ($templateCache) {
             // $templateCache.get("/client/negative_log.html");
         }
     });
@@ -229,7 +265,7 @@
     app.component("dsCdets", {
         controllerAs : "model",
         templateUrl: "/client/cdets.html",
-        constroller : function ($templateCache) {
+        controller : function ($templateCache) {
             // $templateCache.get("/client/cdets.html");
         }
     });
@@ -547,7 +583,7 @@
     });
 
     // functions
-    function run_app($location, toastr, usSpinnerService, user) {
+    function run_app($rootScope, $location, toastr, usSpinnerService, dsig, user) {
         $(document).ready(function () {
             setup_sidebar();
         });
@@ -565,32 +601,47 @@
                 usSpinnerService.stop('spinner-icon');
             }, 1000);
         });
+
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+            if (fromState.name === "") { 
+                alert("initial state: " + toState.name);
+            }
+            return;
+            event.preventDefault();
+            dsig.header.forEach((header) => {
+                if (header.path === current.$$route.originalPath) {
+                    user.cdets.template = header.name;
+                }
+            });
+        });
     }
 
-    function state_config(test_components, dsig, $logProvider, $stateProvider,
-                          $urlRouterProvider, $locationProvider) {        
+    function config_state(test_components, dsig, $logProvider, $urlRouterProvider,
+                          $locationProvider, $stateProvider) {        
         $logProvider.debugEnabled(true);
         // $locationProvider.html5Mode(true);
         $locationProvider.html5Mode({ enabled: true, requireBase: true, rewritenLinks: true});
         
-        const routes = [
+        const states = [
             dsig.welcome, ...dsig.header, dsig.login, ...dsig.footer,
             ...test_components // NOTE: testing            
         ];
-        routes.forEach(add_route);
+        states.forEach(add_state);
         $urlRouterProvider.otherwise("/welcome");
         return;
 
-        function add_route(route) {
+        function add_state(route) {
             $stateProvider.state(route.state, {
                 url : route.path,
+                params : route.params,
                 template: route.template,
+                controller : null,
                 caseInsensitiveMatch: true                
             });
         }
     }
 
-    function toastr_config(toastrConfig) {
+    function config_toastr(toastrConfig) {
         angular.extend(toastrConfig, {
             closeHtml: '<button>&times;</button>',
             timeOut: 5*60*1000,// 5 minutes in m-sec
@@ -602,7 +653,7 @@
         });
     }
     
-    function route_config(test_components, dsig, $logProvider, $routeProvider, $locationProvider) {
+    function config_route(test_components, dsig, $logProvider, $routeProvider, $locationProvider) {
 
         $logProvider.debugEnabled(true);
         // $locationProvider.html5Mode(true);
@@ -628,32 +679,33 @@
     function dsig_constant() {
         return {
             title: {
-                name : "Diagnostic Signature Application", path : "/welcome", template : "<ds-welcome/>"
+                name : "Diagnostic Signature Application",
+                name1 : "Diagnostic Signature App", name2: "Diagnostic Signature",
+                name3 : "DSig", path : "/welcome", params : {}, template : "<ds-welcome/>", copyright: "© 2017 TAC, Cisco. All right reserved."
             },
             welcome: {
-                name: "welcome", state : "welcome", path : "/welcome", template : "<ds-welcome/>"
+                name: "welcome", state : "welcome", params : {}, path : "/welcome", template : "<ds-welcome/>"
             },
-            template : "",
             header : [
                 { name : 'Diagnostic Signature', state : "diagnostic_signature",
-                  path : '/diagnostic_signature/:id?', template : "<ds-diagnostic-signature/>" },
+                  path : '/diagnostic_signature/{id:CSC[a-z]{2,2}[0-9]{5,5}}', params : {id: null}, template : "<ds-diagnostic-signature/>" },
                 { name : 'Field Notice', state : "field_notice",
-                  path : '/field_notice/:id?', template : "<ds-field-notice/>" },
+                  path : '/field_notice', params : {id: null}, template : "<ds-field-notice/>" },
                 { name : 'Release Notes', state : "release_notes",
-                  path : '/release_notes/:id?', template : "<ds-release-notes/>" }
+                  path : '/release_notes?', params : {id: null}, template : "<ds-release-notes/>" }
             ],
             cdets : {
-                name : 'Cdets Web', state : "cdets", template : "<span/>",
+                name : 'Cdets Web', state : "cdets", params : {}, template : "<span/>",
                 path : 'http://cdetsweb-prd.cisco.com/apps/dumpcr?parentprogram=QDDTS'
             },
             login : {
-                name : 'Login', state : "login", path : '/login', template : "<ds-login/>"
+                name : 'Login', state : "login", params : {}, path : '/login', template : "<ds-login/>"
             },
             footer : [
-                { name : 'Document', state : "doc", path : '/doc', template : "<ds-doc/>" },
-                { name : 'API', state : "api", path : '/api', template : "<ds-api/>" },
-                { name : 'About', state : "about", path : '/about', template : "<ds-about/>" },
-                { name : 'Cisco', state : "cisco", path : 'https://www.cisco.com', template : "<span/>" },
+                { name : 'Document', state : "doc", path : '/doc', params: {}, template : "<ds-doc/>", target: "" },
+                { name : 'API', state : "api", path : '/api', params : {}, template : "<ds-api/>", target : "" },
+                { name : 'About', state : "about", path : '/about', params : {}, template : "<ds-about/>", target : "" },
+                { name : 'Cisco', state : "cisco", path : 'https://www.cisco.com', params : {}, template : "<span/>", target : "_blank" },
             ]
         };
     }
@@ -697,11 +749,12 @@
                 phabricator_url : "http://phabricator-swtg.cisco.com/" // D[0-9]+
             },
             cdets : {
-                id : "CSCvc58663",
                 regex : [
                     { type : 'bug', regex : '/^CSC[a-z]{2}\d{5}$/' },
                     { type : 'fn', regex : '/^FN\d{5}$/' }
                 ],
+                template : "Select a template",
+                id : "CSCvc58663",                
                 expressions : [
                     { label: "feb_02_17", logs : "", command : "show date",
                       output: "2017-02-17 10am", regex: "", comments : "" },
@@ -811,7 +864,7 @@
         };
     }
 
-    function spin_config(usSpinnerConfigProvider) {
+    function config_spin(usSpinnerConfigProvider) {
         usSpinnerConfigProvider.setDefaults({color: 'grey'});
     }
     
