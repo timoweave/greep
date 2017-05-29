@@ -1,2 +1,2 @@
-# Log Grep App
+# Grep Text File Logs App
 

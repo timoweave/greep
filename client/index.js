@@ -3,18 +3,19 @@
     
     "use strict";
     
-    const app = angular.module("loggrep", ["ngRoute", "toastr"]);
+    const app = angular.module("loggrep", ["ngRoute", "toastr", "angularSpinner"]);
     app.constant("dsig", dsig_constant());
     app.constant("test_components", test_components());
     app.value("user", user_value());
     app.filter("remove_id", remove_id);
     // app.factory('$templateCache', ["$cacheFactory", "$http", "$injector", cache_template]);
+    app.config(["usSpinnerConfigProvider", spin_config]);
     app.config(["toastrConfig", toastr_config]);
     app.config(["test_components", "dsig", "$logProvider", "$routeProvider", "$locationProvider",
                 route_config]);
     // app.config(["test_components", "dsig", "$logProvider", "$urlRouterProvider", "$stateProvider",
     //             "$locationProvider", state_config]);
-    app.run(['$location','toastr', 'user', run_app]);
+    app.run(['$location','toastr', 'usSpinnerService', 'user', run_app]);
 
     // components
     app.component("dsLogin", {
@@ -173,7 +174,7 @@
                 var keyCode = $event.which || $event.keyCode;
                 if (keyCode === 13) {
                     const url = model.user.misc.cdets_url + '&identifier=' + model.user.misc.cdets;
-                    model.$window.location.href = url;
+                    window.open(url, '_blank');                    
                     const toast = toastr.info('open CDETS ' + model.user.misc.cdets);
                 }
             }
@@ -183,7 +184,7 @@
                 if (keyCode === 13) {
                     const no = model.user.misc.ithaca.replace(/^I-/, '').replace(/^ITHACA-/, '');
                     const url = model.user.misc.ithaca_url + 'ITHACA-' + no;
-                    model.$window.location.href = url;
+                    window.open(url, '_blank');
                     const toast = toastr.info('open ITHACA ' + model.user.misc.ithaca);
                 }
             }
@@ -193,7 +194,7 @@
                 if (keyCode === 13) {
                     const no = model.user.misc.phabricator.replace(/^D/, '');
                     const url = model.user.misc.phabricator_url + 'D' + no;
-                    model.$window.location.href = url;
+                    window.open(url, '_blank');                    
                     const toast = toastr.info('open Phabricator ' + model.user.misc.phabricator);
                 }
             }
@@ -546,7 +547,7 @@
     });
 
     // functions
-    function run_app($location, toastr, user) {
+    function run_app($location, toastr, usSpinnerService, user) {
         $(document).ready(function () {
             setup_sidebar();
         });
@@ -556,6 +557,13 @@
         socket.on(user.io.announcement_channel, function(data) {
             toastr.info(data);
             // console.log(data);            
+        });
+
+        setTimeout(() => {
+            usSpinnerService.spin('spinner-icon');
+            setTimeout(() => {
+                usSpinnerService.stop('spinner-icon');
+            }, 1000);
         });
     }
 
@@ -802,6 +810,11 @@
             }
         };
     }
+
+    function spin_config(usSpinnerConfigProvider) {
+        usSpinnerConfigProvider.setDefaults({color: 'grey'});
+    }
+    
 })();
 
 
