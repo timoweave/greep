@@ -1,3 +1,6 @@
+* {
+    /* border-radius : 0px !important; */ /* round-0 */
+}
 
 html,
 body,
@@ -8,3 +11,53 @@ div.page-content-wrapper,
     height: 100%;
 }
 
+svg.railroad-diagram {
+    background-color: #0275D8;
+}
+
+svg.railroad-diagram rect {
+    stroke-width: 0;
+    stroke: none;
+    fill: #FCAB1B;
+}
+
+svg.railroad-diagram path {
+    stroke-width: 4px;
+    stroke: darkgrey;
+    fill: transparent;
+    stroke-opacity: 0.8;
+}
+
+svg.railroad-diagram text {
+    font-style: normal;
+    font-family: sans-serif;
+    font-weight: 100;
+    text-anchor: middle;
+    stroke: white;
+    fill: white;
+}
+
+.CodeMirror {
+    border: 1px solid lightgrey;
+    height: auto;
+    width: auto;
+    /* color: white; */
+    /* background-color: #5BC0DE;*/
+}
+
+.CodeMirror-linenumber {
+    color: white;
+    background-color: #5BC0DE;
+}
+
+.CodeMirror-focused .cm-matchhighlight {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFklEQVQI12NgYGBgkKzc8x9CMDAwAAAmhwSbidEoSQAAAABJRU5ErkJggg==);
+    background-position: bottom;
+    background-repeat: repeat-x;
+}
+.cm-matchhighlight {
+    background-color: lightgreen
+}
+.CodeMirror-selection-highlight-scrollbar {
+    background-color: green
+}

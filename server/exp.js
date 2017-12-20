@@ -16,7 +16,7 @@ const models = require('./models.js');
 module.exports = {
     init_app, init_aux, init_socketio,
     run_app, static_files, watch_changes, restify_models,
-    send_index, 
+    send_index,
     log_request, post_announcement
 };
 
@@ -50,9 +50,10 @@ function init_app(app = null) {
 
     app.use(log_request(0));
     app.use('/node_modules/', static_files('../node_modules/', { maxAge: 86400000 }));
+    app.use('/bower_components/', static_files('../bower_components/', { maxAge: 86400000 }));
     app.use('/client/', static_files('../client/'));
     app.use('/server/', static_files('../server/'));
-    app.get('/', send_index);    
+    app.get('/', send_index);
 
     return app;
 }
@@ -109,12 +110,12 @@ function log_request(index = 0) {
 }
 
 function static_files(sub_path, opt={}) {
-    const dir = process.env.PWD;
+    const dir = process.env.PWD || __dirname;
     return serve_static(path.join(dir, sub_path), opt);
 }
 
 function send_index(req, res) {
-    const dir = process.env.PWD;
+    const dir = process.env.PWD || __dirname;
     const file = path.join(dir, '../client/index.html');
     return res.status(200).sendFile(file);
 }

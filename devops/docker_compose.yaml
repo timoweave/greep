@@ -2,11 +2,9 @@ version: 2
 services:
   mongo:
     image: mongodb:3.4.2
-    
-  greg:
-    image: timoweave/grep:v1.0
+
+  greep:
+    image: timoweave/greep:v1.0
     port:
       - 8000:8000
     link: mongo
-    
-  
