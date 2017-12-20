@@ -1,0 +1,62 @@
+
+<div class="container-fluid" style="margin-top:0.2em;margin-bottom:0.2em;">
+
+  <div class="panel panel-default"  style="border-radius:0px;">
+    <div class="panel-heading clearfix">
+      <span class="panel-title pull-left" style="margin-top:0.3em;">
+        Retrieve from Database
+      </span>
+      <div class="form-inline pull-right">
+        <input name="" type="text" value="" placeholder="mongo id"
+               ng-model="model.user.cdets.id"
+               class="form-control input-lg" style="margin-right:0.4em; height:34px;" />
+        <button class="btn btn-primary pull-right" type="button"
+                data-toggle="collapse" data-target="#collapse_retrieve_records"
+                aria-expanded="true" aria-controls="collapse_retrieve_records">
+          done
+        </button>
+      </div>
+    </div>
+
+    <div id="collapse_retrieve_records" class="collapse">
+      <div class="panel-body">
+        <table class="table" style="border-style: solid; border-width: 1px; border-color: lightgrey;">
+          <tr>
+            <th>Author</th>
+            <th>Modified Date</th> 
+            <th>Validation State</th>
+            <th>Distribution Level</th>
+            <th>Mongo ID</th>
+            <th></th>                 
+          </tr>
+          
+          <tr ng-repeat="record in model.user.records">
+            
+            <td>{{record.author}}</td>
+            <td>{{record.dateModified}}</td> 
+            <td>{{record.validationState}}</td>
+            <td>{{record.distributionLevel}}</td>
+            <td>{{record.mongoId}} <span class="glyphicon glyphicon-remove" style="color:red;"></span></td>
+            <td><span class="glyphicon glyphicon-ok" style="color:green;"></span></td>         
+          </tr>
+        </table>
+      </div>
+      
+      <div class="panel-footer" style="background-color:transparent;border-radius:0px;">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="bt-group pull-right">
+                <button class="btn btn-danger">cancel</button>
+                <button class="btn btn-primary">save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>  
+  </div>
+</div>
+
