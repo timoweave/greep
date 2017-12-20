@@ -1,0 +1,20 @@
+{
+  "name": "greep",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Timothy Shiu <timoweave@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pegjs": "^0.10.0"
+  }
+}
