@@ -8,4 +8,15 @@
 1. upload/database
 1. passport oauth2
 
+# Screen Captures
+## Welcome page
+!(welcome)[etc/welcome.png]
 
+## Work flow
+!(work_flow)[etc/work_flow.png]
+
+## Regexp Equations
+!(regexp)[etc/reqexp_equation.png]
+
+## Upload Files
+!(upload)[etc/upload_file.png]
