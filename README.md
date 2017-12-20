@@ -16,7 +16,7 @@
 ![work_flow](etc/work_flow.png)
 
 ## Regexp Equations
-![regexp](etc/reqexp_equation.png)
+![regexp](etc/regexp_equation.png)
 
 ## Upload Files
 ![upload](etc/upload_file.png)
